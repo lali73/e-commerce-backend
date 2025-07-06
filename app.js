@@ -17,7 +17,7 @@ app.use('/api/v1/auth', authRouter);
 app.use(errorMiddleware);
 
   app.get('/',(req,res)=>{
-    res.send('WELCOME')
+    res.send('WELCOME TO THE BACKEND OF THIS E-COMMERCE APP')
   });
 
   app.listen(PORT,async ()=>{
