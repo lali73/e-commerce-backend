@@ -74,3 +74,20 @@ catch (error) {
   next(error)
 }
 }
+export const forgetPassword = async (req, res, next) => {
+   try{
+       const {email} =req.body;
+       const user = await User.findOne({email})
+       if (!email) {
+           const error = new Error('User not found');
+       }
+
+       const token = jwt.sign({userId:user._id}, JWT_SECRET, {expiresIn: '15m'});
+       
+
+   }
+   catch (error) {
+       next(error);
+   }
+
+}

@@ -4,12 +4,15 @@ import {PORT} from './config/env.js'
 import authRouter from './routes/auth.routes.js'
 import connectToDatabase from "./database/mogodb.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
-
+import cors from "cors";
 
 
 const app = express();
 
-
+app.use(cors({
+  origin: 'https://elst-e-commerce.vercel.app',
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
