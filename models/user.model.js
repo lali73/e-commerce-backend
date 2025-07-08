@@ -16,6 +16,14 @@ import mongoose from 'mongoose'
          required: [true, 'User Password is required'],
      minlength:5,
      maxlength:120,},
+     resetToken:{
+         type:String,
+         default:null,
+     },
+     resetTokenExpiry:{
+         type: Date,
+         default:null
+     },
  },
 {
     timestamps:true
