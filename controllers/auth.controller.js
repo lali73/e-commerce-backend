@@ -83,6 +83,7 @@ export const forgetPassword = async (req, res, next) => {
        }
 
        const token = jwt.sign({userId:user._id}, JWT_SECRET, {expiresIn: '15m'});
+
        
 
    }
