@@ -81,7 +81,7 @@ export const forgetPassword = async (req, res, next) => {
    try{
        const {email} =req.body;
        const user = await User.findOne({email})
-       if (!email) {
+       if (!user) {
            const error = new Error('User not found');
            throw error;
        }
@@ -101,6 +101,9 @@ export const forgetPassword = async (req, res, next) => {
            'Click here to reset your password',
            `<p>Click<a href="${resetLink}">here</a> to reset your password.</p>`);
 
+
+        res.status(200).json({success:true,
+        message:'Email sent successfully',})
 
 
        
