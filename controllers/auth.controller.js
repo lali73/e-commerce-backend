@@ -116,7 +116,8 @@ export const forgetPassword = async (req, res, next) => {
 
 }
 export const resetPassword = async (req, res, next) => {
-    const {token,newPassword} = req.body;
+    const {newPassword} = req.body;
+    const token = Number(req.body.token);
    try {
        const user = await User.findOne({
            resetToken: token,
