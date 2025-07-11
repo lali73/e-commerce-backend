@@ -85,7 +85,7 @@ export const forgetPassword = async (req, res, next) => {
            throw error;
        }
 
-       const token = Math.floor(100000+Math.random()*900000).toString();
+       const token = Math.floor(100000+Math.random()*900000);
        const resetTokenExpiry = Date.now() + 1000*60*15;
        user.resetToken= token;
        user.resetTokenExpiry = resetTokenExpiry;
