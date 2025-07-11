@@ -123,7 +123,8 @@ export const resetPassword = async (req, res, next) => {
            resetTokenExpiry: {$gt: Date.now()},
        });
        if (!user) {
-           res.status(400).json({success: false,message: 'Invalid or expired token'},
+           return res.status(400).json({success: false,message: 'Invalid or expired token'},
+
 
        )}
        const salt = await bcrypt.genSalt(10);
