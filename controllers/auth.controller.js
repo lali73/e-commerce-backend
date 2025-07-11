@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import {JWT_EXPIRES_IN,JWT_SECRET} from "../config/env.js";
 import {sendEmail} from "../utils/sendEmail.js";
 import{OAuth2Client} from "google-auth-library";
-import{crypto} from "crypto"
+import crypto from "crypto"
 
 
 
