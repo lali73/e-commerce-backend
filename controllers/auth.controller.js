@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import {JWT_EXPIRES_IN,JWT_SECRET} from "../config/env.js";
 import {sendEmail} from "../utils/sendEmail.js";
 import{OAuth2Client} from "google-auth-library";
+import{crypto} from "crypto"
 
 
 
@@ -85,11 +86,15 @@ export const forgetPassword = async (req, res, next) => {
            throw error;
        }
 
-       const token = Math.floor(100000+Math.random()*900000);
+
+       const otp = Math.floor(100000+Math.random()*900000);
        const resetTokenExpiry = Date.now() + 1000*60*15;
-       user.resetToken= token;
+       user.resetToken= otp;
        user.resetTokenExpiry = resetTokenExpiry;
        await user.save();
+
+
+       const token = crypto.randomBytes(16).toString('hex');
 
        const resetLink = `https://elst-e-commerce.vercel.app/auth/resetPassword?token=${token}`;
 
@@ -97,9 +102,9 @@ export const forgetPassword = async (req, res, next) => {
 
        await sendEmail(email,
            'Reset Your Password',
-           `This is your secret code do not share it with anyone ${token}`,
+           `This is your secret code do not share it with anyone ${otp}`,
            `
-<h1>This is your secret code do not share it with anyone ${token}</h1>
+<h1>This is your secret code do not share it with anyone ${otp}</h1>
 <h1>Click<a href="${resetLink}">here</a> to reset your password. </h1>`);
 
 
@@ -116,14 +121,14 @@ export const forgetPassword = async (req, res, next) => {
 
 }
 export const resetPassword = async (req, res, next) => {
-    const {token,newPassword} = req.body;
+    const {otp,newPassword} = req.body;
    try {
        const user = await User.findOne({
-           resetToken: token,
+           resetToken: otp,
            resetTokenExpiry: {$gt: Date.now()},
        });
        if (!user) {
-           return res.status(400).json({success: false,message: 'Invalid or expired token'},
+           return res.status(400).json({success: false,message: 'Invalid or expired otp'},
 
 
        )}
