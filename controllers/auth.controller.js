@@ -98,7 +98,9 @@ export const forgetPassword = async (req, res, next) => {
        await sendEmail(email,
            'Reset Your Password',
            `This is your secret code do not share it with anyone ${token}`,
-           `<p>Click<a href="${resetLink}">here</a> to reset your password.</p>`);
+           `
+<h1>This is your secret code do not share it with anyone ${token}</h1>
+<h1>Click<a href="${resetLink}">here</a> to reset your password. </h1>`);
 
 
         res.status(200).json({success:true,
