@@ -91,7 +91,7 @@ export const forgetPassword = async (req, res, next) => {
        user.resetTokenExpiry = resetTokenExpiry;
        await user.save();
 
-       const resetLink = `https://elst-e-commerce.vercel.app/auth/resetPassword`;
+       const resetLink = `https://elst-e-commerce.vercel.app/auth/resetPassword?token=${token}`;
 
 
 
