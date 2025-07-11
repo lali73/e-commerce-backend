@@ -17,7 +17,7 @@ import mongoose from 'mongoose'
      minlength:5,
      maxlength:120,},
      resetToken:{
-         type:String,
+         type:Number,
          default:null,
      },
      resetTokenExpiry:{
