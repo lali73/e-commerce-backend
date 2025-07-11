@@ -24,6 +24,10 @@ import mongoose from 'mongoose'
          type: Date,
          default:null
      },
+     google:{
+         type:Boolean,
+         default:false,
+     }
  },
 {
     timestamps:true

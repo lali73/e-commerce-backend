@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import {JWT_EXPIRES_IN,JWT_SECRET} from "../config/env.js";
 import {sendEmail} from "../utils/sendEmail.js";
 import crypto from "crypto";
+import{OAuth2Client} from "google-auth-library";
 
 
 
@@ -91,7 +92,7 @@ export const forgetPassword = async (req, res, next) => {
        user.resetTokenExpiry = resetTokenExpiry;
        await user.save();
 
-       const resetLink = `ask dagim?token=${token}`;
+       const resetLink = `https://elst-e-commerce.vercel.app/auth/resetPassword?token=${token}`;
 
 
 
@@ -138,4 +139,61 @@ export const resetPassword = async (req, res, next) => {
    catch (error) {
        next(error);
    }
+}
+export const googleAuth = async (req, res, next) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    const {token:idToken}=req.body;
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+     try {
+         const ticket = await client.verifyIdToken({
+             idToken,
+             audience : process.env.CLIENT_ID,
+         });
+         const payload = ticket.getPayload();
+         const{email,name} = payload;
+
+         const  existingUser = await User.findOne({email})
+         if(existingUser&&!existingUser.google) {
+             const error = new Error('you registerd using a password. Please log in with email and password');
+             throw error;
+         }
+         else if (existingUser&&existingUser.google){
+             const token = jwt.sign({userId: existingUser._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+             session.endSession()
+             return res.status(200).json({
+                 success:true,
+                 message:'User signed-ind successfully',
+                 data:{token,
+                 user:existingUser,}
+                })
+
+         }
+         const newUsers = await  User.create([{
+             name,
+             email,
+             google:true}],{session});
+         const token = jwt.sign({userId: newUsers[0]._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+
+         res.status(200).json({
+             success:true,
+             message:'User signed-up successfully',
+             data:{token,
+                 user:newUsers[0],}
+         });
+         session.commitTransaction();
+         session.endSession();
+
+
+
+
+
+
+
+     }
+     catch (error) {
+         session.abortTransaction();
+         session.endSession();
+         next(error);
+     }
 }
