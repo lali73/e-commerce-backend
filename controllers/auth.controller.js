@@ -4,7 +4,6 @@ import User from "../models/user.model.js";
 import jwt from 'jsonwebtoken';
 import {JWT_EXPIRES_IN,JWT_SECRET} from "../config/env.js";
 import {sendEmail} from "../utils/sendEmail.js";
-import crypto from "crypto";
 import{OAuth2Client} from "google-auth-library";
 
 
@@ -86,19 +85,19 @@ export const forgetPassword = async (req, res, next) => {
            throw error;
        }
 
-       const token = crypto.randomBytes(32).toString('hex');
+       const token = Math.floor(100000+Math.random()*900000).toString();
        const resetTokenExpiry = Date.now() + 1000*60*15;
        user.resetToken= token;
        user.resetTokenExpiry = resetTokenExpiry;
        await user.save();
 
-       const resetLink = `https://elst-e-commerce.vercel.app/auth/resetPassword?token=${token}`;
+       const resetLink = `https://elst-e-commerce.vercel.app/auth/resetPassword`;
 
 
 
        await sendEmail(email,
            'Reset Your Password',
-           'Click here to reset your password',
+           `This is your secret code do not share it with anyone ${token}`,
            `<p>Click<a href="${resetLink}">here</a> to reset your password.</p>`);
 
 
