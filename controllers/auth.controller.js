@@ -74,7 +74,7 @@ try {
     }
     const {role} =user;
 
- const token = jwt.sign({userId:user._id,role:role}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+ const token = jwt.sign({userId:user._id,role:role,userName:user.name}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
  const {password: _,...userWithoutPassword}=user._doc;
 
     res.status(200).json({success:true,
