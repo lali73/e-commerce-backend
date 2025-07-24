@@ -80,10 +80,14 @@ try {
     res.status(200).json({success:true,
     message:'User signed in successfully',
     data:{token,
-        name:user.name,
-        email:user.email,
+        user:{
         id:user.id,
-            user:userWithoutPassword,
+            name:user.name,
+            email:user.email,
+
+
+        },
+
             role
     }});
 
