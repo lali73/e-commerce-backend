@@ -81,6 +81,8 @@ try {
     message:'User signed in successfully',
     data:{token,
         name:user.name,
+        email:user.email,
+        id:user.id,
             user:userWithoutPassword,
             role
     }});
