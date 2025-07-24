@@ -79,7 +79,7 @@ try {
 
     res.status(200).json({success:true,
     message:'User signed in successfully',
-    token,
+    data:{token},
         user:{
         id:user.id,
             name:user.name,
