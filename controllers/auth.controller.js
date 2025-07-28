@@ -72,7 +72,7 @@ try {
         error.statusCode = 401;
         throw error;
     }
-    const {role} =user;
+
 
  const token = jwt.sign({userId:user._id,role:role,name:user.name}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
  //const {password: _,...userWithoutPassword}=user._doc;
