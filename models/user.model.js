@@ -18,7 +18,7 @@ import mongoose from 'mongoose'
      maxlength:120,},
      role:{
          type:String,
-         enum:['client','admin','vendor'],
+         enum:['user','admin','vendor'],
          required: [true, 'User role is required'],
      },
      resetToken:{
