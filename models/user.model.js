@@ -16,10 +16,13 @@ import mongoose from 'mongoose'
          required: [true, 'User Password is required'],
      minlength:5,
      maxlength:120,},
-     role:{
+
+
+         role:{
          type:String,
          enum:['user','admin','vendor'],
          required: [true, 'User role is required'],
+         select:true,
      },
      resetToken:{
          type:Number,
