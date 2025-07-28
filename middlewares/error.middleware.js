@@ -1,29 +1,24 @@
 const errorMiddleware = (err, req, res, next) => {
-    try{
-    let error = {...err};
-    error.message = err.message;
-    console.error (err);
+
+
+    console.error(err);
+    let message  = err.message||'Internal Server Error';
+    let statusCode = err.statusCode|| 500;
 
     if(err.name==='CastError'){
-        const message = 'Resource not found';
-        error = new Error(error.message);
-        error.statusCode = 404;
+        message = 'Resource not found';
+        statusCode = 404;
     }
-        if(err.name==='11000'){
-            const message = ' Duplicate field value entered';
-            error = new Error(error.message);
-            error.statusCode = 400;
-        }
-        if(err.name==='ValidationError'){
-            const message = Object.values(err.errors).map(val=> val.message);
-            error = new Error(error.message);
-            error.statusCode = 404;
-        }
-    res.status(err.statusCode || 500).json({success:false, message:error.message || 'server error'});
+    if(err.code===11000){
+        message = ' Duplicate field value entered';
+        statusCode = 400;
     }
-    catch(error){
-    next(error);
+    if(err.name==='ValidationError'){
+        message = Object.values(err.errors).map(val=> val.message).join(', ');
+        statusCode = 400;
     }
-}
+    res.status(statusCode).json({success: false, message: message||'server error'});
 
+
+}
 export default errorMiddleware;

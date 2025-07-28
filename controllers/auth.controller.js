@@ -29,7 +29,7 @@ export const signUp = async (req, res, next) => {
             const hashedPassword = await bcrypt.hash(password, salt);
 
 
-            const newUsers = await User.create([{name, email,  password:hashedPassword},role],{session});
+            const newUsers = await User.create([{name, email,  password:hashedPassword},role],{session, ordered:true});
 
             const token = jwt.sign({userId: newUsers[0]._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
 
@@ -75,7 +75,7 @@ try {
     const {role} =user;
 
  const token = jwt.sign({userId:user._id,role:role,name:user.name}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
- const {password: _,...userWithoutPassword}=user._doc;
+ //const {password: _,...userWithoutPassword}=user._doc;
 
     res.status(200).json({success:true,
     message:'User signed in successfully',
