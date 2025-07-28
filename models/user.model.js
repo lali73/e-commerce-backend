@@ -22,7 +22,7 @@ import mongoose from 'mongoose'
          type:String,
          enum:['user','admin','vendor'],
          required: [true, 'User role is required'],
-         select:true,
+
      },
      resetToken:{
          type:Number,
