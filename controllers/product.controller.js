@@ -5,7 +5,7 @@ import Product from '../models/product.model.js';
 export const createProduct = async(req, res,next) => {
     try {
         const {name, price,  description, category, stock} = req.body;
-        const newProduct = await  Product.create({name, price,  description, category, stock,image:req.file?.path});
+        const newProduct = await  Product.create({name, price,  description, category, stock, imageUrls: req.files?.map(file => file.path) || []});
 
         return res.status(201).json({success:true,message:'Product created successfully',products:newProduct});
 
