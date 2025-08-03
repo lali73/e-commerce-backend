@@ -25,7 +25,6 @@ export const signUp = async (req, res, next) => {
             }
 
             const salt= await bcrypt.genSalt(10);
-
             const hashedPassword = await bcrypt.hash(password, salt);
 
 
@@ -37,10 +36,10 @@ export const signUp = async (req, res, next) => {
 
             await session.commitTransaction();
             session.endSession();
+
             return res.status(201).json({success: true, message:'User created successfully',
-                data:{
+                data:{token,
                     user:newUsers[0],
-                    token:token,
                 }});
 
 
@@ -61,17 +60,13 @@ try {
 
 
     if (!user) {
-       const error = new Error('User not found');
-       error.statusCode = 404;
-       throw error;
+        return res.status(401).json({success:false,message:'User not found'});
     }
 
 
     const isPasswordValid = await bcrypt.compare(password,user.password);
     if(!isPasswordValid) {
-        const error = new Error('invalid Password');
-        error.statusCode = 401;
-        throw error;
+        return res.status(401).json({success:false,message:'Invalid password'});
     }
 
 
@@ -103,8 +98,7 @@ export const forgetPassword = async (req, res, next) => {
        const {email} =req.body;
        const user = await User.findOne({email})
        if (!user) {
-           const error = new Error('User not found');
-           throw error;
+           return res.status(401).json({success:false,message:'User not found'});
        }
 
 
@@ -149,7 +143,7 @@ export const resetPassword = async (req, res, next) => {
            resetTokenExpiry: {$gt: Date.now()},
        });
        if (!user) {
-           return res.status(400).json({success: false,message: 'Invalid or expired otp'},
+           return res.status(401).json({success: false,message: 'Invalid or expired otp'},
 
 
        )}
