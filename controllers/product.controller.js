@@ -22,7 +22,7 @@ export const allProducts = async(req, res,next) => {
         const rawLimit = parseInt(req.query.limit);
 
     const page =(!isNaN(rawPage) && rawPage>0) ? rawPage : 1;
-    const limit = (!isNaN(rawLimit )&& rawLimit >0 )?Math.min(rawLimit,100):10
+    const limit = (!isNaN(rawLimit )&& rawLimit >0 )?Math.min(rawLimit,100):50
 
 
         const skip = (page - 1)*limit;
@@ -43,7 +43,9 @@ export const allProducts = async(req, res,next) => {
     next(error);
     }
 };
-export const singleProduct = async(req, res) => {};
+export const singleProduct = async(req, res,next) => {
+    const productId = req.params.id;
+};
 export const updateProduct = async(req, res) => {};
 export const deleteProduct = async(req, res) => {};
 
