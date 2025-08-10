@@ -44,8 +44,55 @@ export const allProducts = async(req, res,next) => {
     }
 };
 export const singleProduct = async(req, res,next) => {
-    const productId = req.params.id;
-};
-export const updateProduct = async(req, res) => {};
-export const deleteProduct = async(req, res) => {};
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({success:false,message:'Product not found' });
+        }
+        return res.json({success:true,message:'Product found',product});
+    }
+    catch (error) {
+        next(error);
+    }
 
+};
+/*export const updateProduct = async(req, res, next) => {
+    try{
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    if (!product) {
+        return res.status(404).json({success:false,message:'Product not found'});
+    }
+
+    const allowedFields = ['name','price','description','category','stock','imageUrls'];
+    const keys = Object.keys(req.body);
+    if(keys.length === 0){
+        return res.status(400).json({success:false,message:'No fields to update'})
+    }
+
+    for(const key of keys){
+        if(!allowedFields.includes(key)){
+            return res.status(400).json({success:false,message:'Invalid Key'})
+        }
+        product[key] = req.body[key];
+    }
+    await product.save()
+
+
+    res.status(200).json({success:true,message:'Product updated',product});
+
+
+
+
+
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const deleteProduct = async(req, res,next) => {
+    const productId = req.params.id;
+
+};
+*/

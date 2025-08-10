@@ -5,9 +5,12 @@ const ProductSchema = new mongoose.Schema(
         name:{type:String,required:true,},
         description:{type:String,required:true,},
         imageUrls:[{type:String,required:true,}],
-        price:{type:Number,required:true,},
+        price:{type:Number,required:true,
+        min:[0,'Price must be greater than 0'],},
+
         category:{type:String,required:true,},
-        stock:{type:Number,required:true,},
+        stock:{type:Number,required:true,min:[0,'Stock must be greater than 0'],
+        validate:{validator:Number.isInteger,message:'Stock must be an Integer'},},
 
 },{timestamps:true});
 

@@ -12,7 +12,7 @@ const app = express();
 
 app.use(cors({
   origin: ['https://elst-e-commerce.vercel.app',
-    'http://localhost:3000'],
+    'http://localhost:3000','https://elst-e-commerce-admin.vercel.app'],
   credentials: true,
 }));
 app.use(express.json());
