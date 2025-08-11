@@ -59,9 +59,20 @@ export const singleProduct = async(req, res,next) => {
 
 };
 export const myProducts = async(req, res,next) => {
-    const vendorId = req.user.id;
-    const products = Product.findOne(vendorId)
-}
+   try {
+       const vendorId = req.user.userId;
+       const products = await Product.find({vendorId});
+       if (products.length ===0) {
+           return res.status(404).json({success:false,message:'Product not found'});
+       }
+
+       return res.json({success:true,message:'Product found',products:products});
+   }
+   catch (error) {
+       next(error);
+   }};
+
+
 /*export const updateProduct = async(req, res, next) => {
     try{
     const productId = req.params.id;
