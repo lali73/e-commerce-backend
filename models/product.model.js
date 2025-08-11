@@ -10,8 +10,7 @@ const ProductSchema = new mongoose.Schema(
 
         category:{type:String,required:true,},
         stock:{type:Number,required:true,min:[0,'Stock must be greater than 0'],
-         vendorId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,},
-        validate:{validator:Number.isInteger,message:'Stock must be an Integer'},},
+        validate:{validator:Number.isInteger,message:'Stock must be an Integer'},},vendorId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,},
 
 },{timestamps:true});
 
