@@ -58,6 +58,10 @@ export const singleProduct = async(req, res,next) => {
     }
 
 };
+export const myProducts = async(req, res,next) => {
+    const vendorId = req.user.id;
+    const products = Product.findOne(vendorId)
+}
 /*export const updateProduct = async(req, res, next) => {
     try{
     const productId = req.params.id;

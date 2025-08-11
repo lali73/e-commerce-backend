@@ -10,12 +10,14 @@ const authMiddleware =(req,res,next)=>{
         if(!header || !header.startsWith('Bearer ')){
             return res.status(401).json({success: false, message: 'Unauthorized'});
         }
+        console.log('authorization header',req.headers.authorization);
        const headerArray = header.split(" ")
         const token = headerArray[1]
 
 
 
         req.user = jwt.verify(token, process.env.JWT_SECRET)
+        console.log('authorization header',req.headers.authorization);
        next();
     }
     catch(error){
