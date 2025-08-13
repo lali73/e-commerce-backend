@@ -73,13 +73,17 @@ export const myProducts = async(req, res,next) => {
    }};
 
 
-/*export const updateProduct = async(req, res, next) => {
+export const updateProduct = async(req, res, next) => {
     try{
-    const productId = req.params.id;
-    const product = await Product.findById(productId);
-    if (!product) {
+        const vendorId = req.user.userId;
+        const productId = req.params.id;
+        const product = await Product.findOne({productId,vendorId});
+
+
+        if (!product) {
         return res.status(404).json({success:false,message:'Product not found'});
-    }
+        }
+
 
     const allowedFields = ['name','price','description','category','stock','imageUrls'];
     const keys = Object.keys(req.body);
@@ -108,7 +112,25 @@ export const myProducts = async(req, res,next) => {
     }
 };
 export const deleteProduct = async(req, res,next) => {
-    const productId = req.params.id;
+    try {
+        const vendorId = req.user.userId;
+        const productId = req.params.id;
+        const product = await Product.findOne({productId,vendorId})
+
+        if (!product) {
+            return res.status(404).json({success:false,message:'Product not found'});
+        }
+
+       await product.deleteOne();
+
+
+        return res.status(200).json({success:true,message:'Product deleted successfully'});
+
+
+    }
+    catch (error) {
+        next(error);
+    }
 
 };
-*/
+
