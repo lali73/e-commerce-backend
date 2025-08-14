@@ -77,7 +77,7 @@ export const updateProduct = async(req, res, next) => {
     try{
         const vendorId = req.user.userId;
         const productId = req.params.id;
-        const product = await Product.findOne({productId,vendorId});
+        const product = await Product.findOne({_id:productId,vendorId:vendorId},{}, null);
 
 
         if (!product) {
