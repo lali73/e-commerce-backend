@@ -11,6 +11,6 @@ productRouter.get('/allProducts',allProducts)
 productRouter.get('/singleProduct/:id',singleProduct)
 productRouter.get('/myProducts',authMiddleware,myProducts)
  productRouter.patch('/updateProduct/:id',authMiddleware,updateProduct)
- productRouter.patch('/deleteProduct/:id',authMiddleware,deleteProduct)
+ productRouter.delete('/deleteProduct/:id',authMiddleware,deleteProduct)
 
 export default productRouter;
