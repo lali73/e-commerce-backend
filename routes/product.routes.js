@@ -10,7 +10,7 @@ productRouter.post('/createProduct',authMiddleware,upload.array('images',5),crea
 productRouter.get('/allProducts',allProducts)
 productRouter.get('/singleProduct/:id',singleProduct)
 productRouter.get('/myProducts',authMiddleware,myProducts)
- productRouter.patch('/updateProduct/:id',authMiddleware,updateProduct)
+ productRouter.patch('/updateProduct/:id',authMiddleware,upload.array("images",5),updateProduct)
  productRouter.delete('/deleteProduct/:id',authMiddleware,deleteProduct)
 
 export default productRouter;
