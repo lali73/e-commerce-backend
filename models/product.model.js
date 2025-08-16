@@ -4,7 +4,9 @@ const ProductSchema = new mongoose.Schema(
     {
         name:{type:String,required:true,},
         description:{type:String,required:true,},
-        images:[{url:String,imageId:String,required:true,}],
+        images:[{
+                url:{type:String,required:true},imageId:{type:String,required:true,}
+        }],
 
         price:{type:Number,required:true,
         min:[0,'Price must be greater than 0'],},
