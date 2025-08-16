@@ -112,7 +112,7 @@ let newImages;
 
         }
          newImages = req.files.map((file)=>({
-             url:  file.path,
+             imageUrl:  file.path,
              imageId : file.filename,
 
 
