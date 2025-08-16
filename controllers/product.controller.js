@@ -126,7 +126,11 @@ if(newImages) {
 
 
 
-    const updatedProduct = await Product.findByIdAndUpdate(productId,updateFile, {new:true})
+        Object.keys(updateFile).forEach((key) => {
+            if (key !== "images") product.set(key, updateFile[key]);
+        });
+
+        const updatedProduct = await product.save();
 
 
 
