@@ -1,12 +1,16 @@
 import mongoose from 'mongoose';
 import Product from '../models/product.model.js';
+import cloudinary from 'cloudinary';
 
 
 export const createProduct = async(req, res,next) => {
     try {
         const {name, price,  description, category, stock} = req.body;
         const vendorId = req.user.userId;
-        const newProduct = await  Product.create({name,vendorId, price,  description, category, stock, imageUrls: req.files?.map(file => file.path) || []});
+        const images = req.files.map(file =>({url:file.path,
+        imageId:file.filename}))
+
+        const newProduct = await  Product.create({name,vendorId, price,  description, category, stock,images:images || []});
 
         return res.status(201).json({success:true,message:'Product created successfully',products:newProduct});
 
@@ -75,6 +79,7 @@ export const myProducts = async(req, res,next) => {
 
 export const updateProduct = async(req, res, next) => {
     try{
+        // check if the vendor is the owner of the product
         const vendorId = req.user.userId;
         const productId = req.params.id;
         const product = await Product.findOne({_id:productId,vendorId:vendorId},{}, null);
@@ -83,10 +88,13 @@ export const updateProduct = async(req, res, next) => {
         if (!product) {
         return res.status(404).json({success:false,message:'Product not found'});
         }
+        const updateFile = {...req.body}
 
+// specify what kind of fields can be updated
+    const allowedFields = ['name','price','description','category','stock','images'];
 
-    const allowedFields = ['name','price','description','category','stock','imageUrls'];
-    const keys = Object.keys(req.body);
+// check if the requested field is one of the allowed fields and exists
+    const keys = Object.keys(updateFile);
     if(keys.length === 0){
         return res.status(400).json({success:false,message:'No fields to update'})
     }
@@ -94,13 +102,36 @@ export const updateProduct = async(req, res, next) => {
     for(const key of keys){
         if(!allowedFields.includes(key)){
             return res.status(400).json({success:false,message:'Invalid Key'})
+        }}
+//if it is the image delete the old one and replace with new
+let newImages;
+
+    if(req.files && req.files.length > 0){
+        for (const img of product.images){
+            await cloudinary.uploader.destroy(img.imageId);
+
         }
-        product[key] = req.body[key];
+         newImages = req.files.map((file)=>({
+            imageId : file.filename,
+            imageUrl:  file.path,
+
+
+        }))
     }
-    await product.save()
+
+if(newImages) {
+    updateFile.images = newImages;
+}
+        //update the product
 
 
-    res.status(200).json({success:true,message:'Product updated',product});
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId,updateFile, {new:true})
+
+
+
+
+    res.status(200).json({success:true,message:'Product updated',updatedProduct});
 
 
 
