@@ -112,8 +112,8 @@ let newImages;
 
         }
          newImages = req.files.map((file)=>({
-            imageId : file.filename,
-            url:  file.path,
+            imageId : file.filename || file.public_id,
+            url:  file.path||file.secure_url,
 
 
         }))
@@ -127,7 +127,13 @@ if(newImages) {
 
 
         Object.keys(updateFile).forEach((key) => {
-            if (key !== "images") product.set(key, updateFile[key]);
+            if (key === "images") {
+                if (updateFile.images && updateFile.images.length > 0) {
+                    product.images = updateFile.images;  // Replace old images
+                }
+            } else {
+                product.set(key, updateFile[key]);
+            }
         });
 
         const updatedProduct = await product.save();
