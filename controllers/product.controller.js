@@ -7,7 +7,7 @@ export const createProduct = async(req, res,next) => {
     try {
         const {name, price,  description, category, stock} = req.body;
         const vendorId = req.user.userId;
-        const images = req.files.map(file =>({url:file.path,
+        const images = req.files.map(file =>({imageUrl:file.path,
         imageId:file.filename}))
 
         const newProduct = await  Product.create({name,vendorId, price,  description, category, stock,images:images || []});
