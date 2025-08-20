@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
+//import mongoose from 'mongoose';
 import Product from '../models/product.model.js';
+import Rating from '../models/rating.model.js';
 import cloudinary from 'cloudinary';
 
 
@@ -166,4 +167,47 @@ export const deleteProduct = async(req, res,next) => {
     }
 
 };
+export const rating = async(req, res,next) => {
+        //verify user and product exists
+try{
+    const productId = req.params.id;
+    const userId = req.user.userId;
+    const {rating,review} = req.body
+    const product = await Product.findOne({_id:productId})
+
+    if(!product||!userId){
+        return res.status(404).json({success:false,message:"product not found or Invalid user"})
+    }
+    const existingRating = await Rating.findOne({productId:productId,userId:userId})
+
+    if(rating<1||rating>5){
+        return res.status(400).json({success:false,message:'rating must be b/n 1 and 5'})
+    }
+
+    if (existingRating) {
+        const oldRating = existingRating.rating
+        existingRating.rating = rating||existingRating.rating||0;
+        existingRating.review = review||existingRating.review||"";
+        await existingRating.save()
+        if(product.totalRating===0){
+            product.averageRating=rating;
+        }
+        else{
+        product.averageRating = ((product.averageRating*product.totalRating)-oldRating+rating)/(product.totalRating);}
+        await product.save({validateBeforeSave:false})
+        return res.status(200).json({success:true,message:'Product rating successfully',rating:existingRating,product});
+    }
+    const newRating =await Rating.create({rating,review,productId,userId})
+    product.averageRating = ((product.averageRating * product.totalRating)+rating)/(product.totalRating+1);
+    product.totalRating +=1;
+    await product.save({validateBeforeSave:false});
+
+
+    res.status(201).json({success:true,message:'Product rating successful',rating:newRating,product});
+}
+catch (error){
+    next(error)
+}
+}
+
 

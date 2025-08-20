@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {allProducts, createProduct, myProducts, singleProduct,updateProduct,deleteProduct} from "../controllers/product.controller.js";
+import {allProducts, createProduct, myProducts, singleProduct,updateProduct,deleteProduct,rating} from "../controllers/product.controller.js";
 import upload from '../utils/multer.js'
 import authMiddleware from "../middlewares/auth.middleware.js";
 
@@ -12,5 +12,6 @@ productRouter.get('/singleProduct/:id',singleProduct)
 productRouter.get('/myProducts',authMiddleware,myProducts)
  productRouter.patch('/updateProduct/:id',authMiddleware,upload.array("images",5),updateProduct)
  productRouter.delete('/deleteProduct/:id',authMiddleware,deleteProduct)
+productRouter.post('/rating/:id',authMiddleware,rating)
 
 export default productRouter;
