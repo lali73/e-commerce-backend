@@ -172,17 +172,18 @@ export const rating = async(req, res,next) => {
         //verify user and product exists
 try{
     const productId = req.params.id;
-    const userId = req.user.userId;
+    const {userId,name} = req.user;
     const {rating,review} = req.body
     const product = await Product.findOne({_id:productId})
 
-    if(!product||!userId){
+if(!product||!userId){
         return res.status(404).json({success:false,message:"product not found or Invalid user"})
-    }
-    const existingRating = await Rating.findOne({productId:productId,userId:userId})
+}
 
-    if(rating<1||rating>5){
-        return res.status(400).json({success:false,message:'rating must be b/n 1 and 5'})
+const existingRating = await Rating.findOne({productId:productId,userId:userId})
+
+if(rating<1||rating>5){
+    return res.status(400).json({success:false,message:'rating must be b/n 1 and 5'})
     }
 
     if (existingRating) {
@@ -198,7 +199,7 @@ try{
         await product.save({validateBeforeSave:false})
         return res.status(200).json({success:true,message:'Product rating successfully',rating:existingRating,product});
     }
-    const newRating =await Rating.create({rating,review,productId,userId})
+    const newRating =await Rating.create({rating,review,productId,userId,name})
     product.averageRating = ((product.averageRating * product.totalRating)+rating)/(product.totalRating+1);
     product.totalRating +=1;
     await product.save({validateBeforeSave:false});
