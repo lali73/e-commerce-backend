@@ -53,10 +53,11 @@ export const singleProduct = async(req, res,next) => {
     try {
         const productId = req.params.id;
         const product = await Product.findById(productId);
+        const rating = await Rating.find({productId:productId});
         if (!product) {
             return res.status(404).json({success:false,message:'Product not found' });
         }
-        return res.json({success:true,message:'Product found',product});
+        return res.json({success:true,message:'Product found',product,rating});
     }
     catch (error) {
         next(error);
