@@ -213,26 +213,6 @@ catch (error){
     next(error)
 }
 }
-export const addToCart = async(req, res,next) => {
-    try{
-        const userId = req.user?.userId;
-        const {productId}= req.body;
 
-        const user = await User.findById(userId);
-        const product = await Product.findById(productId);
-        if(!product||!user){
-            return res.status(404).json({success:false,message:'Invalid Product or unauthorized'})
-        }
-        const cart = await Cart.create({productId:productId,userId:userId})
-
-        res.status(201).json({success:true,message:' added to  cart',cart})
-    }
-    catch(error){
-        next(error)
-    }
-
-
-
-}
 
 
