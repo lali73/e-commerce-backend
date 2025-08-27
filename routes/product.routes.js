@@ -22,6 +22,6 @@ productRouter.get('/myProducts',authMiddleware,myProducts)
  productRouter.patch('/updateProduct/:id',authMiddleware,upload.array("images",5),updateProduct)
  productRouter.delete('/deleteProduct/:id',authMiddleware,deleteProduct)
 productRouter.post('/rating/:id',authMiddleware,rating)
-productRouter.post('/addtocart',authMiddleware,addToCart)
+productRouter.post('/addtocart/:id',authMiddleware,addToCart)
 
 export default productRouter;
