@@ -216,7 +216,7 @@ catch (error){
 export const addToCart = async(req, res,next) => {
     try{
         const userId = req.user?.userId;
-        const productId = req.body;
+        const {productId}= req.body;
 
         const user = await User.findById(userId);
         const product = await Product.findById(productId);
