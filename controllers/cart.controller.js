@@ -54,3 +54,16 @@ export const updateCart = async(req, res,next) => {
         next(error)
     }
 }
+export const myCart = async(req, res,next) => {
+    try{
+        const userId = req.user?.userId;
+        const cart = await Cart.findOne({userId:userId});
+        if(!cart){
+            return res.status(400).json({success:false,message:"This user doesn't have any cart.",});
+        }
+        res.status(200).json({success:true,message:' users cart ',cart});
+    }
+    catch(error){
+        next(error)
+    }
+}
