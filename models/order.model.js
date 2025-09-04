@@ -10,6 +10,8 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    address:{type:String,},
+    phoneNumber:{type:Number,},
     items:[
         {
             productId:{type:mongoose.Schema.Types.ObjectId,ref:'Product'},

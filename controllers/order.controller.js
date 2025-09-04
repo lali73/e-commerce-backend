@@ -9,8 +9,15 @@ config();
 export const creatOrder = async (req,res,next)=>{
    try{
        const userId=req.user?.userId;
-       const {items} = req.body;
+       const {items,address,phoneNumber} = req.body;
 
+       const isValidPhone = (phoneNumber)=>{
+           const regex = /^(?:\+251|0)?(9|7)\d{8}$/;
+           return regex.test(phoneNumber);
+       }
+       if(!isValidPhone(phoneNumber)){
+           return res.status(400).send({error:'Phone number is invalid'});
+       }
        const random = crypto.randomBytes(4).toString('hex');
        const orderId = `ORD-${Date.now()}-${random}`;
        let totalAmount = 0;
@@ -28,7 +35,7 @@ export const creatOrder = async (req,res,next)=>{
        }
 
        const gateway = "Chapa"
-       const order = await Order.create({userId,items,orderId,gateway,totalAmount})
+       const order = await Order.create({userId,items,orderId,gateway,totalAmount,phoneNumber,address})
 
 
        res.status(201).json({success:true,message:'Order successfully created',order})
