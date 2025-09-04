@@ -56,7 +56,7 @@ export const initiatePayment = async (req,res,next)=>{
        const paymentPayload = {
            amount:order.amount.toString(),
            tx_ref: order.orderId,
-           callback_url:" https://88ac92d86878.ngrok-free.app/api/v1/order/paymentWebhook",
+           callback_url:"https://e-commerce-backend-lali735628-ghb3g0u6.leapcell.dev/api/v1/order/paymentWebhook",
            currency:"ETB",
 
            customization:{
