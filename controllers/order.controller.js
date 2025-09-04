@@ -54,7 +54,7 @@ export const initiatePayment = async (req,res,next)=>{
        }
        const url = "https://api.chapa.co/v1/transaction/initialize"
        const paymentPayload = {
-           amount:order.amount.toString(),
+           amount:order.amount,
            tx_ref: order.orderId,
            callback_url:"https://e-commerce-backend-lali735628-ghb3g0u6.leapcell.dev/api/v1/order/paymentWebhook",
            currency:"ETB",
