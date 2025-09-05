@@ -15,7 +15,7 @@ const ProductSchema = new mongoose.Schema(
         validate:{validator:Number.isInteger,message:'Stock must be an Integer'},},
         vendorId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,},
         totalRating:{type:Number,default:0,},
-        averageRating:{type:Number, default:0,min:1,max:5}
+        averageRating:{type:Number, default:5,min:1,max:5}
 
 },{timestamps:true});
 
