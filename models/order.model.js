@@ -18,7 +18,6 @@ const OrderSchema = new mongoose.Schema({
             price:{type:Number, required: true},
             amount:{type:Number, required: true},
         }],
-    vendorId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,},
     totalAmount:{type:Number,required:true,},
     status:{
         type:String,
