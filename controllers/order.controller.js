@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import {config} from 'dotenv'
 import axios from 'axios'
 import User from "../models/user.model.js";
+import mongoose from "mongoose";
 
 config();
 
