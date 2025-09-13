@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {creatOrder, initiatePayment, myOrder, paymentWebhook} from "../controllers/order.controller.js";
+import {creatOrder, initiatePayment, myOrders, paymentWebhook} from "../controllers/order.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 
 const orderRouter = new Router();
