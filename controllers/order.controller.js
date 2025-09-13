@@ -122,7 +122,7 @@ export const paymentWebhook = async (req,res,next)=>{
 }
 export const myOrders = async (req,res,next)=>{
     try{
-        const userId=req.user?.userId;
+        const userId=mongoose.Types.ObjectId(req.user?.userId);
         const user = await User.findById(userId);
         if(!user){
             return res.status(400).send({message:'User not found.'});
