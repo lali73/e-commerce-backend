@@ -28,6 +28,7 @@ export const creatOrder = async (req,res,next)=>{
            if(!product){
                return res.status(400).send({message:'Product not found.'});
            }
+           item.vendorId=product.vendorId.toString();
            item.name = product.name
            item.price = product.price
            item.amount = item.price * item.quantity

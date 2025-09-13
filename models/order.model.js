@@ -6,15 +6,13 @@ const OrderSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    userId:{
-        type: String,
-        required: true,
-    },
+    userId:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
     address:{type:String,},
     phoneNumber:{type:Number,},
     items:[
         {
             productId:{type:mongoose.Schema.Types.ObjectId,ref:'Product'},
+            vendorId:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,},
             name: {type: String, required: true},
             quantity: {type: Number, required: true,min:1},
             price:{type:Number, required: true},
