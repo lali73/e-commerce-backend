@@ -3,6 +3,7 @@ import Product from '../models/product.model.js'
 import crypto from 'crypto';
 import {config} from 'dotenv'
 import axios from 'axios'
+import User from "../models/user.model.js";
 
 config();
 
@@ -114,6 +115,39 @@ export const paymentWebhook = async (req,res,next)=>{
         }
         }
         res.status(200).json({success:true,message:"Webhook received."});
+    }
+    catch(error){
+        next(error)
+    }
+}
+export const myOrders = async (req,res,next)=>{
+    try{
+        const userId=req.user?.userId;
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(400).send({message:'User not found.'});
+        }
+        const result = await Order.aggregate([
+            {$unwind:"$items"},
+            {$match:{status:"paid"}},
+            {$group:{_id:"$items.vendorId",
+                    orders:{
+                        $push:{
+                            orderId:"$orderId",
+                            item:"$items"
+                        }
+                    },
+                    totalOrders:{$addToSet:"$_id"},
+                    totalSales:{$sum:"$items.quantity"}
+                }},
+            {$project:{
+
+                    totalOrders:{$size:"$totalOrders"},
+                    totalSales:1,
+                    orders:1,
+                }}
+        ])
+        res.status(200).json({success:true,message:"your order",result});
     }
     catch(error){
         next(error)
