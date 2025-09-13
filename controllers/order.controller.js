@@ -129,7 +129,7 @@ export const myOrders = async (req,res,next)=>{
         }
         const result = await Order.aggregate([
             {$unwind:"$items"},
-            {$match:{status:"Paid"}},
+            {$match:{status:"Paid","items.vendorId":userId}},
             {$group:{_id:"$items.vendorId",
                     orders:{
                         $push:{
