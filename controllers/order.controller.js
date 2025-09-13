@@ -129,25 +129,37 @@ export const myOrders = async (req,res,next)=>{
             return res.status(400).send({message:'User not found.'});
         }
         const result = await Order.aggregate([
-            {$unwind:"$items"},
-            {$match:{status:"Paid","items.vendorId":userId}},
-            {$group:{_id:"$items.vendorId",
-                    orders:{
-                        $push:{
-                            orderId:"$orderId",
-                            item:"$items"
-                        }
-                    },
-                    totalOrders:{$addToSet:"$_id"},
-                    totalSales:{$sum:"$items.quantity"}
-                }},
-            {$project:{
-
-                    totalOrders:{$size:"$totalOrders"},
-                    totalSales:1,
-                    orders:1,
-                }}
-        ])
+            { $unwind: "$items" },
+            { $match: { status: "Paid", "items.vendorId": userId } },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "items.productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            },
+            {
+                $set: {
+                    "items.product": { $arrayElemAt: ["$productDetails", 0] }
+                }
+            },
+            {
+                $group: {
+                    _id: "$items.vendorId",
+                    orders: { $push: { orderId: "$orderId", item: "$items" } },
+                    totalOrders: { $addToSet: "$_id" },
+                    totalSales: { $sum: "$items.quantity" }
+                }
+            },
+            {
+                $project: {
+                    orders: 1,
+                    totalOrders: { $size: "$totalOrders" },
+                    totalSales: 1
+                }
+            }
+        ]);
         res.status(200).json({success:true,message:"your order",result});
     }
     catch(error){
