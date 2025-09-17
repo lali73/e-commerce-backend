@@ -153,6 +153,24 @@ export const myOrders = async (req,res,next)=>{
                 }
             },
             {
+                $lookup: {
+                    from: "products",
+                    let: { vendor: "$_id" },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ["$vendorId", "$$vendor"] } } },
+                        { $count: "count" }
+                    ],
+                    as: "vendorProducts"
+                }
+            },
+            {
+                $addFields: {
+                    totalProducts: {
+                        $ifNull: [{ $arrayElemAt: ["$vendorProducts.count", 0] }, 0]
+                    }
+                }
+            },
+            {
                 $project: {
                     orders: 1,
                     totalOrders: { $size: "$totalOrders" },
@@ -160,6 +178,7 @@ export const myOrders = async (req,res,next)=>{
                 }
             }
         ]);
+
         res.status(200).json({success:true,message:"your order",result});
     }
     catch(error){
