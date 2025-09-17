@@ -174,7 +174,8 @@ export const myOrders = async (req,res,next)=>{
                 $project: {
                     orders: 1,
                     totalOrders: { $size: "$totalOrders" },
-                    totalSales: 1
+                    totalSales: 1,
+                    totalProducts:1,
                 }
             }
         ]);
