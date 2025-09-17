@@ -147,7 +147,7 @@ export const myOrders = async (req,res,next)=>{
             {
                 $group: {
                     _id: "$items.vendorId",
-                    orders: { $push: { orderId: "$orderId", item: "$items" } },
+                    orders: { $push: { orderId: "$orderId", item: "$items" ,createdAt: "$createdAt",} },
                     totalOrders: { $addToSet: "$_id" },
                     totalSales: { $sum: "$items.quantity" }
                 }
