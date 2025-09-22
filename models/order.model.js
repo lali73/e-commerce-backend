@@ -33,6 +33,8 @@ const OrderSchema = new mongoose.Schema({
         type:String,
     },
     gateway:{type:String,required:true,},
+    delivery:{type:String,enum:["Pending","Delivered","NotDelivered"], default:"NotDelivered"},
+    deliveryOTP:{type:String},
 
 
 },{timestamps:true});

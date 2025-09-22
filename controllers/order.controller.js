@@ -5,6 +5,7 @@ import {config} from 'dotenv'
 import axios from 'axios'
 import User from "../models/user.model.js";
 import mongoose from "mongoose";
+import {sendEmail} from "../utils/sendEmail.js";
 
 config();
 
@@ -182,6 +183,38 @@ export const myOrders = async (req,res,next)=>{
 
         res.status(200).json({success:true,message:"your order",result});
     }
+    catch(error){
+        next(error)
+    }
+}
+export const deliverOrder = async (req,res,next)=>{
+    try {
+    const vendorId = req.user?.userId;
+    const {orderId} = req.body;
+
+    const order = await Order.findOne({orderId:orderId})
+   
+    if(!order){
+        return res.status(400).send({message:'Order not found.'});
+    }
+   // const phoneNumber = order.phoneNumber;
+    const OTP = Math.floor(100000+ Math.random()*900000);
+    const userId = order.userId.toString();
+
+     const user = await User.findOne({_id:userId})
+    const email = user.email
+    const subject = "Package Delivery From ShopHub";
+     const text = `This is your confirmation OTP that You have recived the package. do not share this unless the package is delivered. OTP:${OTP}`
+    const html = `<h1>This is your confirmation OTP that You have recived the package. do not share this unless the package is delivered. OTP:${OTP}</h1>`;
+
+    await sendEmail(email,subject,text,html);
+
+    order.delivery = "Pending",
+    order.deliveryOTP = OTP;
+    await order.save();
+    res.status(200).json({success:true,message:"OTP sent successfully. "});
+    }
+
     catch(error){
         next(error)
     }
