@@ -226,7 +226,7 @@ export const verifyOrder = async (req,res,next)=>{
         if(!order){
             return res.status(400).send({message:'Order not found.'});
         }
-    if(!(order.deliveryOTP===OTP||order.delivery==="Delivered")){
+    if(!(order.deliveryOTP===OTP)){
 
         return res.status(400).send({message:'Invalid OTP or already verified.'});
     }
