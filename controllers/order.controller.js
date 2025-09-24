@@ -232,6 +232,7 @@ export const verifyOrder = async (req,res,next)=>{
     }
     order.delivery = "Delivered";
     order.deliveryOTP = undefined;
+    await order.save();
 
     res.status(200).json({success:true,message:"Order verified."})
     }
