@@ -189,7 +189,7 @@ export const myOrders = async (req,res,next)=>{
 }
 export const deliverOrder = async (req,res,next)=>{
     try {
-    const vendorId = req.user?.userId;
+    //const vendorId = req.user?.userId;
     const {orderId} = req.body;
 
     const order = await Order.findOne({orderId:orderId})
@@ -215,6 +215,26 @@ export const deliverOrder = async (req,res,next)=>{
     res.status(200).json({success:true,message:"OTP sent successfully. "});
     }
 
+    catch(error){
+        next(error)
+    }
+}
+export const verifyOrder = async (req,res,next)=>{
+    try{
+    const {orderId,OTP} = req.body;
+    const order = await Order.findOne({orderId:orderId})
+        if(!order){
+            return res.status(400).send({message:'Order not found.'});
+        }
+    if(!(order.deliveryOTP===OTP||order.delivery==="Delivered")){
+
+        return res.status(400).send({message:'Invalid OTP or already verified.'});
+    }
+    order.delivery = "Delivered";
+    order.deliveryOTP = undefined;
+
+    res.status(200).json({success:true,message:"Order verified."})
+    }
     catch(error){
         next(error)
     }
