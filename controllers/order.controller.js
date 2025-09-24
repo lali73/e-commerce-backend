@@ -231,7 +231,7 @@ export const verifyOrder = async (req,res,next)=>{
         return res.status(400).send({message:'Invalid OTP or already verified.'});
     }
     order.delivery = "Delivered";
-    order.deliveryOTP = undefined;
+    order.deliveryOTP = null;
     await order.save();
 
     res.status(200).json({success:true,message:"Order verified."})
