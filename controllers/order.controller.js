@@ -60,6 +60,7 @@ export const initiatePayment = async (req,res,next)=>{
        const paymentPayload = {
            amount:order?.totalAmount.toString(),
            tx_ref: order.orderId,
+           phone_Number:order.phoneNumber,
            callback_url:"https://e-commerce-backend-lali735628-ghb3g0u6.leapcell.dev/api/v1/order/paymentWebhook",
            currency:"ETB",
 
