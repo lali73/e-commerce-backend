@@ -16,6 +16,6 @@ orderRouter.post('/initiatePayment',initiatePayment)
 orderRouter.get('/paymentWebhook',paymentWebhook)
 orderRouter.get('/myOrders',authMiddleware,myOrders)
 orderRouter.post('/deliverOrder',authMiddleware,deliverOrder)
-orderRouter.post('verifyOrder',authMiddleware,verifyOrder)
+orderRouter.post('/verifyOrder',authMiddleware,verifyOrder)
 
 export default orderRouter;
